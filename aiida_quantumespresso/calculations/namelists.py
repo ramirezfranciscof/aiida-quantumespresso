@@ -185,6 +185,7 @@ class NamelistsCalculation(CalcJob):
 
         # copy remote output dir, if specified
         parent_calc_folder = self.inputs.get('parent_folder', None)
+        _restart_copy_from = os.path.join(self._INPUT_SUBFOLDER, '*')
         if parent_calc_folder is not None:
             if isinstance(parent_calc_folder, RemoteData):
                 parent_calc_out_subfolder = settings.pop('PARENT_CALC_OUT_SUBFOLDER', self._INPUT_SUBFOLDER)
@@ -193,6 +194,14 @@ class NamelistsCalculation(CalcJob):
                     os.path.join(parent_calc_folder.get_remote_path(),
                                  parent_calc_out_subfolder), self._OUTPUT_SUBFOLDER
                 ))
+        # OLD MODIFS:
+        #        _restart_copy_from = os.path.join(parent_calc_out_subfolder, '*')
+        #        remote_copy_list.append((
+        #            parent_calc_folder.computer.uuid,
+        #            os.path.join(parent_calc_folder.get_remote_path(), _restart_copy_from),
+        #            self._OUTPUT_SUBFOLDER
+        #        ))
+
             elif isinstance(parent_calc_folder, FolderData):
                 for filename in parent_calc_folder.list_object_names():
                     local_copy_list.append(

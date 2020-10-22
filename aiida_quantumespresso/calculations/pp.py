@@ -188,6 +188,8 @@ class PpCalculation(CalcJob):
 
         # Copy remote output dir
         parent_calc_folder = self.inputs.get('parent_folder', None)
+        _restart_copy_from = os.path.join(self._INPUT_SUBFOLDER, '*')
+        _pseudos_copy_from = os.path.join(self._PSEUDO_SUBFOLDER, '*')
         if isinstance(parent_calc_folder, orm.RemoteData):
             remote_copy_list.append((
                 parent_calc_folder.computer.uuid,
@@ -197,6 +199,18 @@ class PpCalculation(CalcJob):
                 parent_calc_folder.computer.uuid,
                 os.path.join(parent_calc_folder.get_remote_path(), self._PSEUDO_SUBFOLDER), self._PSEUDO_SUBFOLDER
             ))
+        # OLD STUFF REF
+        #    remote_copy_list.append((
+        #        parent_calc_folder.computer.uuid,
+        #        os.path.join(parent_calc_folder.get_remote_path(), _restart_copy_from),
+        #        self._OUTPUT_SUBFOLDER
+        #    ))
+        #    remote_copy_list.append((
+        #        parent_calc_folder.computer.uuid,
+        #        os.path.join(parent_calc_folder.get_remote_path(), _pseudos_copy_from),
+        #        self._PSEUDO_SUBFOLDER
+        #    ))
+
         elif isinstance(parent_calc_folder, orm.FolderData):
             for filename in parent_calc_folder.list_object_names():
                 local_copy_list.append(
